@@ -16,11 +16,14 @@ def csv_merge():
     allData = [] # 읽어 들인 csv파일 내용을 저장할 빈 리스트를 하나 만든다
     for file in allFile_list:
         df = pd.read_csv(file) # for구문으로 csv파일들을 읽어 들인다
+        df.columns=['ax', 'ay', 'az', 'gx', 'gy', 'gz']
         allData.append(df) # 빈 리스트에 읽어 들인 내용을 추가한다
 
 # data normalization
 remove row with char(eng), null to 0. 
 
+#df 합치기
+a=pd.concat(allData,ignore_index=  False)
 
 #Max-Min
 MaxMin_datacombined = (datacombine-datacombine.min()) / (datacombine.max()-datacombine.min())
