@@ -18,18 +18,14 @@ def csv_merge():
         df = pd.read_csv(file) # for구문으로 csv파일들을 읽어 들인다
         allData.append(df) # 빈 리스트에 읽어 들인 내용을 추가한다
 
-   # allData's type is list. Need to make DataFrame. 
-datacombined = pd.concat(allData,axis=0,ignore_index=True)
+# data normalization
+remove row with char(eng), null to 0. 
+
 
 #Max-Min
 MaxMin_datacombined = (datacombine-datacombine.min()) / (datacombine.max()-datacombine.min())
 
-    
-    minmax_df = scaler.transform(allData)
-    # dataCombined <- 최대-최소 정규화 하자
-
-    dataCombined.to_csv(output_file, index=False) # to_csv함수로 저장한다. 인데스를 빼려면 False로 설정
-    return
+    return MaxMin_datacombined
 
 
 # Make pipline
@@ -53,5 +49,21 @@ def get_compiled_model():
 model = get_compiled_model()
 model.fit(train_dataset, epochs=15)
 
+# 6 훈련 과정 시각화 (정확도)
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('Model accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
 
+# 7 훈련 과정 시각화 (손실)
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
 
