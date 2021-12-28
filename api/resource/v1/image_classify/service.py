@@ -1,12 +1,28 @@
-# -*- coding: utf-8 -*-  
-""" 
-* file description 
-    - Copyright ⓒ 2021 KCNET, All rights reserved.
-    - fileName : ``service.py``
-    - author : ``이서용 (Lee Seo Yong)``
-    - date : ``2021-12-16 오전 12:08``
-    - comment : `` ``
-       
-* revision history 
-    - 2021-12-16    Lee Seo Yong    최초 작성
-"""
+
+import matplotlib as plt
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras import datasets, layers, models
+import pandas as pd
+import glob
+import os
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+
+# 6 훈련 과정 시각화 (정확도)
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('Model accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
+
+# 7 훈련 과정 시각화 (손실)
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()

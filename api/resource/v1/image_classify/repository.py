@@ -4,23 +4,13 @@ import functools
 import matplotlib as plt
 import numpy as np
 import tensorflow as tf
+from tensorflow.keras import datasets, layers, models
 import pandas as pd
 import glob
 import os
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-#common에 넣을 변수들.
-input_bd_val_file = r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\test\rf_bd\raw_CSV'  # csv파일들이 있는 디렉토리 위치
-output_bd_val_file= r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\test\rf_bd\CSV'
-input_bd_train_file = r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\train\rf_bd\raw_CSV'
-output_bd_train_file= r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\train\rf_bd\CSV'
-input_br_val_file = r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\test\rf_br\raw_CSV'  # csv파일들이 있는 디렉토리 위치
-output_br_val_file = r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\test\rf_br\CSV'
-input_br_train_file = r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\train\rf_br\raw_CSV'
-outpu_br_train_file = r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\train\rf_br\CSV'
-
-
-output_file = r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\test\rf_br'  # 저장하려는 위치
-
+from .common import input_bd_train_file
 
 def csv_merge():
 
@@ -54,7 +44,8 @@ def data_label(motion):
         k=0
         for i in split_data[0]:
 
-            i.to_csv(r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\train\rf_bd\CSV\rf_bd'+ str(k)+ '.csv',header=False,index=False)
+            i.to_csv(r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\train\rf_bd\CSV\rf_bd'+ str(k)+ '.csv',
+                     header=False,index=False)
             k = k+1
 
     elif motion == 'br': #브릿지 데이터 csv 저장
@@ -65,7 +56,8 @@ def data_label(motion):
         k=0
         for i in split_data[0]:
 
-            i.to_csv(r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\test\rf_br\CSV\rf_br'+ str(k)+ '.csv',header=False,index=False)
+            i.to_csv(r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\test\rf_br\CSV\rf_br'+ str(k)+ '.csv',
+                     header=False,index=False)
             k = k+1
 
 
@@ -77,7 +69,8 @@ def data_label(motion):
         k=0
         for i in split_data[0]:
 
-            i.to_csv(r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\test\rf_cb\rf_cb'+ str(k)+ '.csv',header=False,index=False)
+            i.to_csv(r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\test\rf_cb\rf_cb'+ str(k)+ '.csv',
+                     header=False,index=False)
             k = k+1
 
     elif motion == 'ws':#허리펴기 데이터 csv 저장
@@ -88,77 +81,43 @@ def data_label(motion):
         k=0
         for i in split_data[0]:
 
-            i.to_csv(r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\test\rf_ws\rf_ws'+ str(k)+ '.csv',header=False,index=False)
+            i.to_csv(r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\test\rf_ws\rf_ws'+ str(k)+ '.csv',
+                     header=False,index=False)
             k = k+1
         return
 
-# train 데이터셋 경로 지정
-train_bd_dir = './tmp/horse-or-human/horses'
-train_br_dir = r'C:\Users\0614_\Desktop\개발용\motion_classirfy_raw_data\10. refined data\test\rf_br\CSV'
+
+
 # bd 파일 이름 리스트
-train_horse_names = os.listdir(train_bd_dir)
-print(train_bd_dir[:10])
-
-# br 파일 이름 리스트
-train_human_names = os.listdir(train_br_dir)
-print(train_br_dir[:10])
-
-# horses/humans 총 이미지 파일 개수
-print('total training horse images:', len(os.listdir(train_bd_dir)))
-print('total training human images:', len(os.listdir(train_br_dir)))
-
-# validation 데이터셋 경로 지정
-
-validation_bd_dir =
-validation_br_dir =
-
-validation_cats_dir = os.path.join(validation_bd_dir, 'cats')
-validation_dogs_dir = os.path.join(validation_br_dir, 'dogs')
-
-
-
-
-
-
-
+# train_horse_names = os.listdir(train_bd_dir)
+# print(train_bd_dir[:10])
 #
-# data normalization
+# # br 파일 이름 리스트
+# train_human_names = os.listdir(train_br_dir)
+# print(train_br_dir[:10])
+#
+# # horses/humans 총 이미지 파일 개수
+# print('total training horse images:', len(os.listdir(train_bd_dir)))
+# print('total training human images:', len(os.listdir(train_br_dir)))
 
-# Make pipline
-dataset = tf.data.Dataset.from_tensor_slices((df.values, target.values))
 
-# Make model
-def get_compiled_model():
-  model = tf.keras.Sequential([
-    tf.keras.layers.Dense(10, activation='relu'),
-    tf.keras.layers.Dense(10, activation='relu'),
-    tf.keras.layers.Dense(1)
-  ])
 
-  model.compile(optimizer='adam',
-                loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
-                metrics=['accuracy'])
-  return model
+#이미지 전처리
+# train_datagen = ImageDataGenerator(rescale=1/255)
+#
+# train_generator = train_datagen.flow_from_directory(
+#   './tmp/horse-or-human',
+#   target_size=(300, 300),
+#   batch_size=128,
+#   class_mode='binary'
+# )
+#
+#
+# # Make pipline
+# dataset = tf.data.Dataset.from_tensor_slices((df.values, target.values))
 
-# train model
-model = get_compiled_model()
-model.fit(train_dataset, epochs=15)
 
-# 6 훈련 과정 시각화 (정확도)
-plt.plot(history.history['accuracy'])
-plt.plot(history.history['val_accuracy'])
-plt.title('Model accuracy')
-plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
-plt.legend(['Train', 'Test'], loc='upper left')
-plt.show()
 
-# 7 훈련 과정 시각화 (손실)
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title('Model loss')
-plt.xlabel('Epoch')
-plt.ylabel('Loss')
-plt.legend(['Train', 'Test'], loc='upper left')
-plt.show()
+
+
 
